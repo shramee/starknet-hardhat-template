@@ -1,23 +1,25 @@
 import { starknet } from "hardhat";
 import { expect } from "chai";
-import { getAccount } from "./devnet-testing-helper";
+import { deployContract, getAccount } from "./devnet-testing-helper";
+import { StarknetContract } from "hardhat/types";
+import { OpenZeppelinAccount } from "@shardlabs/starknet-hardhat-plugin/dist/src/account";
 
 describe("Example contract", async () => {
-  it("declare and deploy", async () => {
-    const account = await getAccount();
-    const contractFactory = await starknet.getContractFactory("Example");
-    const classHash = await account.declare(contractFactory);
+  let account: OpenZeppelinAccount, exampleContract: StarknetContract;
+  before(async () => {
+    account = await getAccount();
+    exampleContract = await deployContract("Example");
+  });
 
-    // two ways to obtain the class hash
-    expect(classHash).to.equal(await contractFactory.getClassHash());
+  it("add balance", async () => {
+    const amountToAdd = 2356;
+    const balancePre = await exampleContract.call("get_balance");
+    await account.invoke(exampleContract, "increase_balance", {
+      amount: amountToAdd,
+    });
+    const balancePost = await exampleContract.call("get_balance");
+    console.log(balancePost.res - balancePre.res);
 
-    const constructorArgs = {};
-    const options = { maxFee: 9e16 };
-    // implicitly invokes UDC
-    const contract = await account.deploy(
-      contractFactory,
-      constructorArgs,
-      options
-    );
+    expect(balancePost.res - balancePre.res).to.be.equal(BigInt(amountToAdd));
   });
 });

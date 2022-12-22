@@ -2,6 +2,7 @@ import { starknet } from "hardhat";
 import fs from "fs";
 import { PredeployedAccount } from "@shardlabs/starknet-hardhat-plugin/dist/src/devnet-utils";
 import { OpenZeppelinAccount } from "@shardlabs/starknet-hardhat-plugin/dist/src/account";
+import { StarknetContract } from "hardhat/types";
 
 type DevnetHelper = {
   accounts: PredeployedAccount[];
@@ -60,4 +61,17 @@ export async function getAccount(index = 0): Promise<OpenZeppelinAccount> {
     address,
     private_key
   );
+}
+
+export async function deployContract(
+  name: string,
+  constructorArgs: any = {}
+): Promise<StarknetContract> {
+  const account = await getAccount();
+  const contractFactory = await starknet.getContractFactory(name);
+  await account.declare(contractFactory);
+
+  const options = { maxFee: 9e18 };
+  // implicitly invokes UDC
+  return await account.deploy(contractFactory, constructorArgs, options);
 }
