@@ -4,7 +4,8 @@
   "description": "ECS written in Cairo",
   "main": "index.js",
   "scripts": {
-    "test": "hardhat test --starknet-network integrated-devnet"
+    "test": "hardhat test --starknet-network integrated-devnet",
+    "pretest": "hardhat starknet-compile"
   },
   "repository": {
     "type": "git",
@@ -21,8 +22,10 @@
   },
   "homepage": "https://github.com/shramee/cairo-ecs-hardhat#readme",
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+    "chai": "^4.3.7",
     "@shardlabs/starknet-hardhat-plugin": "^0.7.1",
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
     "hardhat": "^2.12.4"
   }
 }
