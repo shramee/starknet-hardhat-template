@@ -4,8 +4,9 @@
   "description": "ECS written in Cairo",
   "main": "index.js",
   "scripts": {
-    "test": "hardhat test --starknet-network integrated-devnet",
-    "pretest": "hardhat starknet-compile"
+    "test": "hardhat test",
+    "pretest": "hardhat starknet-compile --disable-hint-validation",
+    "devnet-test": "npm test -- --starknet-network devnet"
   },
   "repository": {
     "type": "git",

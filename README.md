@@ -4,15 +4,14 @@ This is minimalistic plug and play template for Hardhat Starknet projects.
 
 ## What's included?
 
+### Default network is integrated-devnet
+
 ### `starknet-compile` before tests
 
-> ~~StarknetPluginError: Could not find JSON artifact for "...cairo". Consider recompiling your contracts.~~
+Shows compile errors and generates artifacts when you run tests.
 
 ```
-package.json
-...
-"pretest": "hardhat starknet-compile"
-...
+"pretest": "hardhat starknet-compile --disable-hint-validation"
 ```
 
 ### Easy tests
@@ -20,17 +19,29 @@ package.json
 Just do,
 
 ```sh
-npm test
+npm run test
 ```
 
 It runs your contract on devnet and includes utils to grab prefunded accounts. See [devnet-testing-helper.ts file](test/devnet-testing-helper.ts).
 
-Try running some of the following tasks:
+### Fast tests with devnet
 
-```shell
-npx hardhat help
-npx hardhat test --starknet-network integrated-devnet
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
+To have the tests run faster, use a local devnet and not the integrated devnet. Using integrated devnet with hardhat starknet needs spinning up and stopping docker containers for every compile and test. From 36 seconds to 8 seconds!
+
+When you have local `devnet` use this,
+
+```
+npm run devnet-test
+```
+
+### Fast compiling with local venv
+
+Use local Cairo venv for compiling to avoid spending time spinning up and stopping docker containers for each test/compile. After setting up your [Cairo environment](https://www.cairo-lang.org/docs/quickstart.html) edit hardhat config to point to your local venv. For 2 simple contracts, from 17 seconds down to 5 seconds.
+
+```ts
+  starknet: {
+    network: "integrated-devnet",
+    // Use this venv for faster compiling
+    venv: "~/cairo_venv", // Change ~/cairo_venv to your cairo venv location
+  ...
 ```
