@@ -1,6 +1,29 @@
 # Sample Starknet Hardhat Project
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This is minimalistic plug and play template for Hardhat Starknet projects.
+
+## What's included?
+
+### `starknet-compile` before tests
+
+> ~~StarknetPluginError: Could not find JSON artifact for "...cairo". Consider recompiling your contracts.~~
+
+```
+package.json
+...
+"pretest": "hardhat starknet-compile"
+...
+```
+
+### Easy tests
+
+Just do,
+
+```sh
+npm test
+```
+
+It runs your contract on devnet and includes utils to grab prefunded accounts. See [devnet-testing-helper.ts file](test/devnet-testing-helper.ts).
 
 Try running some of the following tasks:
 
